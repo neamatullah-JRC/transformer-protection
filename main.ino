@@ -2,7 +2,7 @@
 const byte rs = A4, en = A3, d4 = A2, d5 = A1, d6 = A0, d7 = 12;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
-int load = 4;
+int load = 7;
 int ThermistorPin = A5;
 #define echo 2
 #define trigger 3
@@ -27,6 +27,8 @@ void setup()
   pinMode(load, OUTPUT);
   pinMode(echo, INPUT );
   pinMode(trigger, OUTPUT);
+ pinMode(ThermistorPin, INPUT );
+  pinMode(buttonPin, INPUT_PULLUP );
 
 }
 
@@ -39,36 +41,36 @@ void loop() {
   T = (1.0 / (c1 + c2 * logR2 + c3 * logR2 * logR2 * logR2));
   Tc = T - 273.15;
   Tf = (Tc * 9.0) / 5.0 + 32.0;
-Tf = 32.0;
+  //Tf = 32.0;
   lcd.setCursor(0, 0);
-  lcd.print("Temp:");
-  lcd.print(Tf);
-  lcd.print(" F     ");
+  lcd.print("Temp=");
+  lcd.print(Tc);
+  lcd.print(" C     ");
  delay(500);
- // level = Ultrasonic_read();
-   level = 40;
+ level = Ultrasonic_read();
+  // level = 40;
   
   lcd.setCursor(1, 1);
-  lcd.print("oil:");
+  lcd.print("Oil=");
   lcd.print(level);
-  lcd.print(" cm");
+  lcd.print(" mL");
 
  delay(500);
   buttonState = digitalRead(buttonPin);
 
-  if (Tf > 100)
+  if (Tc > 80)
   {
     digitalWrite(load,LOW);
-    //SendMessagetemp();
+    SendMessagetemp();
     
   } else if (level < 20)
   {
     digitalWrite(load,LOW);
-    //SendMessage0il();
-  } else if (buttonState == HIGH)
+    SendMessage0il();
+  } else if (buttonState == LOW)
   {
     digitalWrite(load,LOW );
-    //SendMessageshort();
+    SendMessageshort();
   }
 }
 
@@ -86,7 +88,10 @@ long Ultrasonic_read() {
 
 void SendMessage0il() {
   lcd.clear();
+   lcd.setCursor(0, 0);
   lcd.print("Massege sending...");
+  lcd.setCursor(1, 1);
+  lcd.print("Oil Level Is Low.");
   Serial.begin(9600);
   Serial.print("\r");
   delay(1000);
@@ -98,12 +103,16 @@ void SendMessage0il() {
   delay(1000);
   Serial.write(0x1A);
   delay(1000);
+   lcd.clear();
 
 }
 
 void SendMessagetemp() {
   lcd.clear();
+  lcd.setCursor(0, 0);
   lcd.print("Massege sending...");
+  lcd.setCursor(1, 1);
+  lcd.print(" Temp Is High.     ");
   Serial.begin(9600);
   Serial.print("\r");
   delay(1000);
@@ -115,11 +124,15 @@ void SendMessagetemp() {
   delay(1000);
   Serial.write(0x1A);
   delay(1000);
+   lcd.clear();
 }
 
 void SendMessageshort() {
   lcd.clear();
+  lcd.setCursor(0, 0);
   lcd.print("Massege sending...");
+  lcd.setCursor(1, 1);
+  lcd.print("Short Circuit.    ");
   Serial.begin(9600);
   Serial.print("\r");
   delay(1000);
@@ -131,6 +144,7 @@ void SendMessageshort() {
   delay(1000);
   Serial.write(0x1A);
   delay(1000);
+   lcd.clear();
 }
 
 void makeCall() {

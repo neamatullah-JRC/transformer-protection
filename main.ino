@@ -6,7 +6,7 @@ int load = 7;
 int ThermistorPin = A5;
 #define echo 2
 #define trigger 3
-const int buttonPin = 5;
+const int buttonPin = 8;
 
 int buttonState;
 long distance;
@@ -27,9 +27,10 @@ void setup()
   pinMode(load, OUTPUT);
   pinMode(echo, INPUT );
   pinMode(trigger, OUTPUT);
- pinMode(ThermistorPin, INPUT );
+  pinMode(ThermistorPin, INPUT );
   pinMode(buttonPin, INPUT_PULLUP );
-
+  lcd.print("   Welcome....  ");
+delay(1000); 
 }
 
 
@@ -97,7 +98,7 @@ void SendMessage0il() {
   delay(1000);
   Serial.print("AT+CMGF=1\r");
   delay(1000);
-  Serial.print("AT+CMGS=\"+8801920639338\"\r");
+  Serial.print("AT+CMGS=\"+8801748447181\"\r");
   delay(1000);
   Serial.print("[WARNING] Oil level is low\r");
   delay(1000);
@@ -118,7 +119,7 @@ void SendMessagetemp() {
   delay(1000);
   Serial.print("AT+CMGF=1\r");
   delay(1000);
-  Serial.print("AT+CMGS=\"+8801920639338\"\r");
+  Serial.print("AT+CMGS=\"+8801748447181\"\r");
   delay(1000);
   Serial.print("[WARNING] Temperature has gone up from Normal State.\r");
   delay(1000);
@@ -138,7 +139,7 @@ void SendMessageshort() {
   delay(1000);
   Serial.print("AT+CMGF=1\r");
   delay(1000);
-  Serial.print("AT+CMGS=\"+8801920639338\"\r");
+  Serial.print("AT+CMGS=\"+8801748447181\"\r");
   delay(1000);
   Serial.print("[WARNING] short-circuit alert  \r");
   delay(1000);
@@ -154,7 +155,7 @@ void makeCall() {
   lcd.setCursor(0, 0);
   lcd.print("Calling...");
   delay(1000);
-  Serial.println("ATD+8801920639338;"); //Number to which you want to make call
+  Serial.println("ATD+8801748447181;"); //Number to which you want to make call
   delay(10000);
   Serial.println("ATH");
   lcd.clear();
